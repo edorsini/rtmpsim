@@ -1,0 +1,138 @@
+body {
+
+}
+body > div{
+	padding-top: 45px;
+}
+#header {
+	height:40px;
+	background-color:#000;
+	color: #FFF;
+	font-weight:bold;
+	font-size:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	opacity: 0.7;
+	position: fixed;
+	width: 100%;
+	z-index: 50;	
+}
+#header > div {
+	padding-top:5px;	
+}
+.main-pane {
+	min-height:280px;
+	padding-left: 10px;
+}
+.modal-footer {
+	margin-top: -10px;
+}
+.range {
+	font-weight:normal;
+}
+#running-results {
+	min-height:150px;
+}
+#case-info-div{
+	font-size: 14px;
+}
+#process-table-div, #edit-case-table-div{
+	margin-left: 20px;
+}
+#process-table td, #edit-case-table td{
+	width: 25%;
+}
+#process-table tr, #edit-case-table tr{
+	height: 30px;
+}
+#process-table input, #edit-case-table input{
+	width: 70%;
+	height: 25px;
+}
+#add-process, #load-process {
+	float:left;
+}
+.delete-process {
+	font-size:20px;
+	font-weight:bold;
+}
+a:link{
+	text-decoration:none;
+}
+#scheme-text, #algorithm-text, #workload-text{
+	margin-left: 20px;
+}
+#workload-table {
+	width: 100%;
+}
+#control-pane{
+	margin-top:20px;
+	text-align:right;
+	margin-right:15px
+}
+#control-pane button {
+	width: 115px;
+	margin-right:10px;
+}
+#resource-text table th, #process-text table th, #stats-overall-text table th, #stats-detail-text table th{
+	text-align: center;
+}
+#resource-text table td, #process-text table td, #stats-overall-text table td, #stats-detail-text table td{
+	text-align: center;
+}
+#scheme-text {
+	text-transform: capitalize; 
+}  
+/* For error message */
+label.error {
+	color: red;
+	padding: 2px 8px;
+	margin-top: 2px;
+}
+#files {
+	width: 200px;
+}
+.instruction-icon{
+	width: 20px;
+	height: 20px;
+	display: none;
+	background-image: url(../icon/question.png);
+	vertical-align: middle;
+}
+
+.instruction-div{
+	width: 350px;
+	height: 200px;
+	background-color: black;
+	opacity: 0.75;
+	color: white;
+	position: relative;
+	top: 10px;
+	left: 10px;
+	font-weight: normal;
+	font-size: 16px;
+	padding-left: 25px;
+	padding-top: 20px;
+	padding-right: 25px;
+	padding-bottom: 20px;
+	line-height:180%;
+	letter-spacing: 2px;
+	z-index: 50;
+	font-family:"Georgia Regular";
+	clear: both;
+}
+.instruction-div span{
+	float: left;
+	width:50px; 
+	font-size:400%;
+	padding-top: 15px;
+	height: 40px;
+}
+#algorithm-text, #scheme-text{
+	display: inline-block;
+}
+#statistics-panel table tr{
+	text-align: center;
+}
+#statistics-panel table th{
+	text-align: center;
+}

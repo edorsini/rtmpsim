@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Scheduling Simulator</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/result.css" />
+	<base target="_self">
+</head>
+<body>
+	<!-- Website Header -->
+	<header id="header" role="banner">
+		<div class="container">  
+	       Real-time CPU Scheduling Simulator for Multiprocessors
+	    </div>
+	</header>
+
+	<div class="container"> 
+		<!-- Controller and Result Display Panel -->
+		<div class="row">			
+			<div class="col-md-10">
+				<div class="row">
+					<div class="col-md-5">
+						<h3><b><span id="alg-title"></span> Scheduling Algorithm </b><div class="instruction-icon algorithm-instruction-icon"></div></h3>
+					</div>
+					<div class="col-md-7">
+						<form class="form-inline" id="control-pane">
+							<div class="form-group" id="case-panel">
+								<button type="button" class="btn btn-primary" id="add-case">Add Case</button>
+								<button type="button" class="btn btn-primary" id="edit-case" style="display:none;">Edit Case</button>
+							</div>
+							<div class="form-group" id="start-running" style="display:none;">	
+								<button type="button" class="btn btn-primary" id="start-simulator">Start Simulator</button>
+							</div>
+							<div class="form-group" id="stop-running" style="display:none;">			
+								<button type="button" class="btn btn-primary" id="step-forward">Step Forward</button>
+								<button type="button" class="btn btn-primary" id="step-back">Step Back</button>
+								<button type="button" class="btn btn-danger" id="finish-simulator">Finish</button>
+								<button type="button" class="btn btn-danger" id="stop-simulator">Restart</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<hr/>
+				<div id="result-display-title" class="col-md-1"></div>
+				<div id="running-results" class="col-md-10">	
+					<div id="result-display-panel" ></div>
+				</div>	
+				<div id="result-display-readyqueue" class="col-md-1"></div>
+			</div>
+
+			<!-- Recorder and Description Panel -->
+			<div class="col-md-2">
+				<div id="result-recorder">
+					<h3><b>Recorder</b></h3>
+					<hr/>
+					<span class="col1" >Time</span>
+					<span class="col2">Event</span>
+					<div id="result-recorder-div">
+						<table class='table table-hover' id="result-recorder-table">
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Result Legend -->
+			<div class="col-md-10">
+				<div id="result-legend">
+					<ul class="list-inline">
+  						<li><span>&#8593</span> arrival event<span></span></li>
+  						<li><span style="color:red;">&#8593</span><span> preempt event</span></li>
+  						<li><span style="color:red;text-decoration:line-through">&nbsp&nbspP#&nbsp&nbsp</span><span> miss event</span></li>
+  						<li><span id="legend-runningprocess"> </span><span> running process</span></li>
+  						<li><span id="legend-readyqueue"> </span><span> ready queue</span></li>
+  						<li><span>P# (priority)</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- Case Infofmation Panel -->
+		<div class="row main-pane">			
+			<h3><b>Case Infomation</b></h3>
+			<hr/>
+			<div id="case-info-div">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Strategy</h4>
+						<p id="scheme-text"></p>
+						<div class='instruction-icon scheme-instruction-icon' style="width:15px;height:15px;background-image:url(icon/question2.png);"></div>
+					</div>
+					<div class="col-md-3">
+						<h4>Algorithm</h4>
+						<p id="algorithm-text"></p>
+						<div class='instruction-icon algorithm-instruction-icon' style="width:15px;height:15px;background-image:url(icon/question2.png);"></div>
+					</div>
+					<div class="col-md-6">
+						<h4>Workload</h4>
+						<p id="workload-text"></p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">						
+						<h4>Resource</h4>
+						<div id= "resource-text">
+							<table class='table table-hover'>
+								<tr class='info'>
+									<th>CID</th>
+									<th>CPU Name</th>
+								</tr>
+							</table>
+						</div>	
+					</div>
+					<div class="col-md-9">
+						<h4>Process</h4>
+						<div id= "process-text"> 
+							<table class='table table-hover'>
+								<tr class='info'>
+									<th>PID</th>
+									<th>Process Name</th>
+									<th>Arrive Time</th>
+									<th>Execution Time</th>
+									<th>Period</th>
+									<th>Color</th>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Statistics Panel -->
+		<div class="row main-pane" id="statistics-panel">
+			<h3><b>Statistics </b><span style="font-size:14px;"> (Time range 0~500)</span></h3>
+			<hr/>
+			<div class="row">
+				<div class="col-md-4" >	
+					<h4>The Whole System</h4>					
+					<div id="statistics-system">
+						<table class="table table-hover" >
+							<tr class="info">
+								<th>Number of CPUs</th>
+								<th>Avg. Utilization</th>
+								<th>Avg. Miss Rate</th>
+							</tr>
+						</table>
+					</div>	
+				</div>
+				<div class="col-md-4">
+					<h4>Per CPU</h4>
+					<div id="statistics-cpu"> 
+						<table class="table table-hover">
+							<tr class="info">
+								<th>CID</th>
+								<th>Utilization</th>
+								<th>Miss Rate</th>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<h4>Per Process</h4>
+					<div id="statistics-process"> 
+						<table class="table table-hover">
+							<tr class="info">
+								<th>PID</th>
+								<th>Utilization</th>
+								<th>Miss Rate</th>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+
+	<!-- Modal Dialog for Setting CPU and Scheme -->
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">CPU and Strategy Settings</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<form class="form-horizontal form-myModal1">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="cpu-quantity">Set CPU Quantity</label>
+                    <div class="col-xs-5">
+                        <input type="text" class="form-control" id="cpu-quantity" name="cpu-quantity" value="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="scheme">Select Strategy <div class='instruction-icon select-scheme-instruction-icon' style="display:inline-block;width:15px;height:15px;background-image:url(icon/question2.png);"> </div></label>      
+                    <div class="col-xs-5">
+                    	<select class="form-control" id="scheme" name="scheme">
+						  <option value="">---- Select a Strategy ----</option>
+						  <option value="global">Global</option>
+						  <option value="partitioned">Partitioned</option>
+						</select>
+                    </div>
+
+                </div>
+            </form>
+          </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	        <button class="btn btn-primary" id="show-modal2">Next</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Dialog for Setting Algorithm -->
+	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Algorithm Settings</h4>
+	      </div>
+	      <div class="modal-body">
+	    	<form class="form-horizontal form-myModal2" id="algorithm-list"></form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	        <button type="button" class="btn btn-primary"  id="show-modal3">Next</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Dialog for Setting Process Data -->
+	<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Process Settings</h4>
+	      </div>
+	      <div class="modal-body">	      	
+	      	<form class="form-horizontal form-myModal3">
+	      	  <div class="form-group">					
+		        <label class="col-sm-4 control-label">Set Process Quantity</label>
+		        <div class="col-xs-5">
+		          <input type="text" class="form-control" id="process-quantity" name="process-quantity">
+		        </div>&nbsp;&nbsp;&nbsp;
+		        <button type="button" class="btn btn-primary" id="random-process" style="display:none;">Randomize</button> 
+		      </div>
+		      <hr>
+		      <!-- Process Information Table -->
+		      <div id="process-table-div" class="form-group "></div>
+		    </form>
+		    <!-- File Operation Section -->
+		    <div class="form-horizontal">
+		      <hr class="save-process-group" style="display:none;">
+		      <div class="form-group save-process-group" style="display:none;">
+				<label class="col-sm-4 control-label">Filename to Save As</label>
+				<div class="col-xs-5">
+			      <div class="input-group col-xs-10">
+				    <input type="text" class="form-control" id="fileName" name="fileName">
+					<span class="input-group-addon">.txt</span>
+				  </div>
+			    </div>
+			    <div>
+				  <button class="btn btn-primary" id="save-process">Save</button>
+			    </div>
+			  </div>
+			  <div class="form-group">
+				<label class="col-sm-4 control-label">Choose File to Load</label>
+				<div class="col-xs-5">
+			      <input type="file" id="files" name="file"/>
+			    </div>
+			    <div>
+				  <button class="btn btn-primary" id="load-process">Load</button>
+			    </div>
+			  </div>
+		    </div>
+		  </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	        <button type="button" class="btn btn-primary" id="save-case">Finish</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Modal Dialog for Editing Process Data -->
+	<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Case Editing</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<form class="form-horizontal form-myModal4">
+		        <div id="edit-case-table-div" class="form-group"></div>
+		    </form>
+	      </div>
+	      <div class="modal-footer">
+	      	<button type="button" class="btn btn-primary" id="add-process">Add Process</button>
+	        <button type="button" class="btn btn-default" id="cancel-edit-case"data-dismiss="modal">Cancel</button>
+	        <button type="button" class="btn btn-primary" id="save-edit-case">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- Framework Script -->
+	<script src="js/framework/jquery-1.11.1.min.js"></script>
+	<script src="js/framework/jquery.validate.min.js"></script>
+	<script src="js/framework/bootstrap.min.js"></script>
+	<!-- Customized Script -->
+	<script src="js/validation.js"></script>
+	<script src="js/object/process.js"></script>
+	<script src="js/object/resource.js"></script>
+	<script src="js/object/simulator.js"></script>
+	<script src="js/object/recorder.js"></script>
+	<script src="js/object/statistics.js"></script>	
+	<script src="js/controller/execController.js"></script>
+	<script src="js/controller/eventController.js"></script>
+	<script src="js/controller/renderController.js"></script>
+	<!-- Algorithm Script -->
+	<script src="js/algorithm/scheme.js"></script>
+	<script src="js/algorithm/alg-functions.js"></script>
+	<script src="js/algorithm/P_EDF.js"></script>
+	<script src="js/algorithm/P_RMS.js"></script>
+	<script src="js/algorithm/P_LLF.js"></script>
+	<script src="js/algorithm/G_EDF.js"></script>
+	<script src="js/algorithm/G_RMS.js"></script>
+	<script src="js/algorithm/G_LLF.js"></script>
+</body>
+</html>
